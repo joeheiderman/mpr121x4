@@ -42,7 +42,10 @@
  * 08/01/2022 reverse order of board and sensor in Menu
  * 08/02/2022 revise menu wording
  * 08/03/2022 remove mpr121x4 references
+ * 08/03/2022 Added scanner started flag to fix the test if there is more than one board
  */
+
+let scannerStarted = false;
 
 const enum TouchSensor { // JRH001
     T0 = 0b000000000001,
@@ -188,7 +191,9 @@ namespace mpr121x4 {
         /*********************************************************************
          * MPR121 Scanner
          *****************************************************************/
-        if (touchState.length > 1) return; // start just one scanner
+        if (scannerStarted) return; // start just one scanner
+        scannerStarted = true;
+        
         serial.writeLine("Starting mpr121 scanner...");
 
         basic.forever(function () {
